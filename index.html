@@ -9,21 +9,23 @@
     textarea { width: 100%; min-height: 100px; margin-bottom: 10px; }
     button { padding: 10px 20px; font-size: 16px; }
     #output { min-height: 100px; background: #f7f7f7; }
-    #macros-list { background: #eef; padding: 10px; margin-bottom: 20px; border-radius: 6px; }
+    #macros-list { background: #eef; padding: 10px; margin-top: 30px; border-radius: 6px; }
+    #macros-list ul { max-height: 200px; overflow-y: auto; padding-left: 20px; }
     .macro-item { margin-bottom: 6px; }
   </style>
 </head>
 <body>
   <h2>Macro Expander Webapp</h2>
-  <div id="macros-list">
-    <h4>Available Macros:</h4>
-    <div id="macros"></div>
-  </div>
   <p>Paste your text below, click "Expand Macros", and copy the result.</p>
   <textarea id="input" placeholder="Paste your text here..."></textarea>
   <button onclick="expandMacros()">Expand Macros</button>
   <h4>Expanded text:</h4>
   <textarea id="output" readonly></textarea>
+
+  <div id="macros-list">
+    <h4>Available Macros:</h4>
+    <ul id="macros"></ul>
+  </div>
 
   <script>
     let macros = {};
@@ -45,13 +47,13 @@
     }
 
     function renderMacros() {
-      const macrosDiv = document.getElementById('macros');
-      macrosDiv.innerHTML = '';
+      const macrosUl = document.getElementById('macros');
+      macrosUl.innerHTML = '';
       for (const [key, value] of Object.entries(macros)) {
-        const item = document.createElement('div');
+        const item = document.createElement('li');
         item.className = 'macro-item';
         item.textContent = `"${key}" → "${value}"`;
-        macrosDiv.appendChild(item);
+        macrosUl.appendChild(item);
       }
     }
   </script>
