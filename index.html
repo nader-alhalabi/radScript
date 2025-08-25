@@ -51,7 +51,9 @@
     function expandMacros() {
       let text = document.getElementById('input').value;
       for (const [key, value] of Object.entries(macros)) {
-        text = text.split(key).join(value);
+        // Replace all case variations of the macro key
+        const regex = new RegExp(key, 'gi');
+        text = text.replace(regex, value);
       }
       document.getElementById('output').value = text;
     }
