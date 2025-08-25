@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Macro Expander Webapp</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 40px; }
+    textarea { width: 100%; min-height: 100px; margin-bottom: 10px; }
+    button { padding: 10px 20px; font-size: 16px; }
+    #output { min-height: 100px; background: #f7f7f7; }
+  </style>
+</head>
+<body>
+  <h2>Macro Expander Webapp</h2>
+  <p>Paste your text below, click "Expand Macros", and copy the result.</p>
+  <textarea id="input" placeholder="Paste your text here..."></textarea>
+  <button onclick="expandMacros()">Expand Macros</button>
+  <h4>Expanded text:</h4>
+  <textarea id="output" readonly></textarea>
+
+  <script>
+    let macros = {};
+    // Load macros.json from the same directory
+    fetch('macros.json')
+      .then(response => response.json())
+      .then(data => { macros = data; })
+      .catch(() => { macros = {}; });
+
+    function expandMacros() {
+      let text = document.getElementById('input').value;
+      for (const [key, value] of Object.entries(macros)) {
+        // Replace all occurrences of the macro key
+        text = text.split(key).join(value);
+      }
+      document.getElementById('output').value = text;
+    }
+  </script>
+</body>
+</html>
