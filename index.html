@@ -10,7 +10,7 @@
     button { padding: 10px 20px; font-size: 16px; }
     #output { min-height: 100px; background: #f7f7f7; }
     #macros-list { background: #eef; padding: 10px; margin-top: 30px; border-radius: 6px; }
-    #macros-list ul { max-height: 200px; overflow-y: auto; padding-left: 20px; }
+    #macros-list ul { max-height: 200px; overflow-y: auto; padding-left: 20px; border: 1px solid #ccc; background: #fff; }
     .macro-item { margin-bottom: 6px; }
   </style>
 </head>
@@ -29,14 +29,24 @@
 
   <script>
     let macros = {};
-    // Load macros.json from the same directory
-    fetch('macros.json')
-      .then(response => response.json())
-      .then(data => {
-        macros = data;
-        renderMacros();
-      })
-      .catch(() => { macros = {}; });
+    // Try to load macros.json, fallback to hardcoded macros if running locally
+    function loadMacros() {
+      fetch('macros.json')
+        .then(response => response.json())
+        .then(data => {
+          macros = data;
+          renderMacros();
+        })
+        .catch(() => {
+          // Fallback: hardcoded macros for local testing
+          macros = {
+            "breast negative": "No acute findings.",
+            "breast": "Findings consistent with pneumonia.",
+            "normal": "Evidence of fracture present."
+          };
+          renderMacros();
+        });
+    }
 
     function expandMacros() {
       let text = document.getElementById('input').value;
@@ -56,6 +66,8 @@
         macrosUl.appendChild(item);
       }
     }
+
+    loadMacros();
   </script>
 </body>
 </html>
